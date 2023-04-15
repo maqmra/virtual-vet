@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @CrossOrigin(origins = "http://localhost:8080")
 @RestController
@@ -40,8 +41,9 @@ public class UserController {
 
     @PostMapping("/users")
     public ResponseEntity<User> createUser(@RequestBody User user) {
-        if (!userRepository.existsById(user.getId())) {
-            User newUser = userRepository.save(new User(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail()));
+        if (userRepository.findAll().stream().map(User::getEmail).noneMatch(email -> email.equals(user.getEmail()))) {
+//            User newUser = userRepository.save(new User(user.getFirstName(), user.getLastName(), user.getEmail()));
+            User newUser = userRepository.save(user);
             return new ResponseEntity<>(newUser, HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
