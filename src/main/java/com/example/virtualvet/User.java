@@ -5,6 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -41,7 +42,8 @@ public class User {
     @NonNull
     private String email;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_id", nullable = false)
     private List<Pet> pets;
 
     public User(String firstName, String lastName, @NonNull String email) {
@@ -51,12 +53,17 @@ public class User {
         this.pets = new ArrayList<>();
     }
 
-    public Pet addPet(Pet pet) {
-        if (pets.stream().map(Pet::getId).noneMatch(petId -> Objects.equals(petId, pet.getId()))) {
+    public boolean addPet(Pet pet) {
+        if (pets.stream().map(Pet::getName).noneMatch(petName -> Objects.equals(petName, pet.getName()))) {
             pets.add(pet);
-            return pet;
-        } else {
-            return null;
+            return true;
+        }
+        return false;
+    }
+
+    public void deletePet(Pet pet) {
+        if (pets.stream().map(Pet::getId).anyMatch(petId -> Objects.equals(petId, pet.getId()))) {
+            pets.remove(pet);
         }
     }
 }
