@@ -46,6 +46,7 @@ public class User {
     @JoinColumn(name = "user_id", nullable = false)
     private List<Pet> pets;
 
+
     public User(String firstName, String lastName, @NonNull String email) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -66,4 +67,21 @@ public class User {
             pets.remove(pet);
         }
     }
+
+    public Pet findPetById(Long id) {
+        if (pets.isEmpty()) {
+            return null;
+        }
+        for (Pet pet : pets) {
+            if (Objects.equals(pet.getId(), id)) {
+                return pet;
+            }
+        }
+        return null;
+    }
+
+
+
+
+
 }

@@ -3,7 +3,7 @@ package com.example.virtualvet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
-@CrossOrigin(origins = "http://localhost:8080")
 @RestController
 public class UserController {
 
@@ -24,7 +22,7 @@ public class UserController {
     private UserRepository userRepository;
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<User>> getAll() {
         List<User> users = new ArrayList<>(userRepository.findAll());
         if (users.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -34,15 +32,14 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") String id) {
+    public ResponseEntity<User> getById(@PathVariable(name = "id") String id) {
         Optional<User> optionalUser = userRepository.findById(id);
         return optionalUser.map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<User> create(@RequestBody User user) {
         if (userRepository.findAll().stream().map(User::getEmail).noneMatch(email -> email.equals(user.getEmail()))) {
-//            User newUser = userRepository.save(new User(user.getFirstName(), user.getLastName(), user.getEmail()));
             User newUser = userRepository.save(user);
             return new ResponseEntity<>(newUser, HttpStatus.CREATED);
         }
@@ -50,9 +47,9 @@ public class UserController {
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") String id, @RequestBody User user) {
-        if (userRepository.existsById(id)) {
-            User updatedUser = userRepository.getReferenceById(id);
+    public ResponseEntity<User> updateById(@PathVariable(name = "id") Long id, @RequestBody User user) {// TODO: czemu usuwa mi też czat?
+        if (userRepository.existsById(id.toString())) {
+            User updatedUser = userRepository.getReferenceById(id.toString());
             updatedUser.setFirstName(user.getFirstName());
             updatedUser.setLastName(user.getLastName());
             updatedUser.setEmail(user.getEmail());
@@ -61,5 +58,14 @@ public class UserController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<Long> deleteById(@PathVariable(name = "id") Long id) {
+        if (!userRepository.existsById(id.toString())) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        userRepository.deleteById(id.toString());
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 }
