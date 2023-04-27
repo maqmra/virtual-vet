@@ -1,6 +1,5 @@
 package com.example.virtualvet;
 
 public interface VetResponder {
-    String ask();
-
+    Message answer(Chat chat, Message message);
 }

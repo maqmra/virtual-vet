@@ -38,6 +38,7 @@ public class Message {
     @Column(name = "create_time", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createTime;// TODO: add "yyyy-MM-dd hh:mm:ss" format
+    // TODO: add timezone to createTime
 
 
 

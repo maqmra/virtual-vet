@@ -57,17 +57,14 @@ public class Chat {
     }
 
     public boolean addMessage(Message message) {
-        if (messages.stream().anyMatch(foundMessage -> Objects.equals(foundMessage.getId(), message.getId()))) {
+        if (messageExist(message)) {
             return false;
         }
         messages.add(message);
         return true;
     }
 
-    public String getResponse() {
-        Message response = new Message(getResponse(), Type.RESPONSE);
-        messages.add(response);
-        return new StubVetResponder().ask(); //TODO: how to use VetResponder?
+    private boolean messageExist(Message message) {
+        return messages.stream().anyMatch(foundMessage -> Objects.equals(foundMessage.getId(), message.getId()));
     }
-
 }
