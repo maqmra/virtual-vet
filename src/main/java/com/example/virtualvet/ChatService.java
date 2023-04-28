@@ -27,13 +27,13 @@ public class ChatService {
         Chat chat = foundChat.get();
         boolean messageAdded = chat.addMessage(message);
 
-        if (messageAdded) {//TODO: reverse logic
-            Message answer = vetResponder.answer(chat, message);
-            chat.addMessage(answer);
-            chatRepository.save(chat);
-
-            return Optional.ofNullable(answer);
+        if (!messageAdded) {
+            return Optional.empty();
         }
-        return Optional.empty();
+        Message answer = vetResponder.answer(chat, message);
+        chat.addMessage(answer);
+        chatRepository.save(chat);
+
+        return Optional.ofNullable(answer);
     }
 }

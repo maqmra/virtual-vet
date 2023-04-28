@@ -38,7 +38,12 @@ public class ChatController {
 
     @PostMapping("/chats/{id}/messages")
     public ResponseEntity<Message> addMessage(@PathVariable(name = "id") Long chatId, @RequestBody Message message) {
-        chatService.addMessage(chatId, message); //TODO: return ResponseEntioties
+        Optional<Message> addedMessage = chatService.addMessage(chatId, message);
+        if (addedMessage.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN); // TODO: how to return (HttpStatus.NOT_FOUND) and (HttpStatus.CONFLICT)
+        }
+        return new ResponseEntity<>(addedMessage.get(), HttpStatus.CREATED);
+
 //        Optional<Chat> foundChat = chatRepository.findById(chatId);
 //        if (foundChat.isEmpty()) {
 //            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
