@@ -64,6 +64,9 @@ public class Chat {
     }
 
     private boolean messageExist(Message message) {
+        if (message.getId() == null) {
+            return false;
+        }
         return messages.stream().anyMatch(foundMessage -> Objects.equals(foundMessage.getId(), message.getId()));
     }
 }

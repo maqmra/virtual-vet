@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ChatService {
@@ -34,6 +35,7 @@ public class ChatService {
     }
 
     public Chat addMessage(Long chatId, Message message) {
+        UUID.randomUUID();
         Optional<Chat> foundChat = chatRepository.findById(chatId);
         if (foundChat.isEmpty()) {
             throw new ResourceNotFoundException();
@@ -44,8 +46,8 @@ public class ChatService {
            throw new ResourceAlreadyExistsException();
         }
         Message answer = vetResponder.answer(chat, message);
-        chat.addMessage(answer); // TODO: answer is not saved in the chat
+        chat.addMessage(answer);
         chatRepository.save(chat);
-        return chat; //TODO: how to return message from repository?
+        return chat; // TODO: check if there is a solution to return answer
     }
 }
