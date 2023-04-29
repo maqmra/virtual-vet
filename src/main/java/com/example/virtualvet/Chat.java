@@ -30,14 +30,13 @@ public class Chat {
     private Long id;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @OnDelete(action = OnDeleteAction.SET_NULL)
+//    @OnDelete(action = OnDeleteAction.SET_NULL) // TODO: check this
     @JoinColumn(name = "chat_id", nullable = false)
     private List<Message> messages;
 
     @ManyToOne
     @JoinColumn(name = "pet_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.SET_NULL)
-    // TODO: czy po usunięciu peta powinny usuwać się też chaty? Jak na moje to nie
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Pet pet;
 
     @ManyToOne
@@ -51,7 +50,7 @@ public class Chat {
         this.pet = pet;
         this.messages = new ArrayList<>();
     }
-
+//
     public Chat() {
         this.messages = new ArrayList<>();
     }

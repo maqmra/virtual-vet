@@ -1,10 +1,9 @@
 package com.example.virtualvet;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,21 +18,34 @@ public class ChatService {
     private VetResponder vetResponder;
 
 
-    public Optional<Message> addMessage(Long chatId, Message message) {
+    public Chat createChat(Long userId, Long petId) {
+        Optional<User> foundUser = userRepository.findById(userId.toString());
+        if (foundUser.isEmpty()) {
+            throw new ResourceNotFoundException();
+        }
+        User user = foundUser.get();
+        List<Pet> pets = user.getPets();
+        if (pets.isEmpty() || pets.stream().map(Pet::getId).noneMatch(foundPetId -> foundPetId.equals(petId))) {
+            throw new ResourceNotFoundException();
+        }
+        Pet pet = user.findPetById(petId);
+        Chat chat = new Chat(user, pet);
+        return chatRepository.save(chat);
+    }
+
+    public Chat addMessage(Long chatId, Message message) {
         Optional<Chat> foundChat = chatRepository.findById(chatId);
         if (foundChat.isEmpty()) {
-            return Optional.empty();
+            throw new ResourceNotFoundException();
         }
         Chat chat = foundChat.get();
         boolean messageAdded = chat.addMessage(message);
-
         if (!messageAdded) {
-            return Optional.empty();
+           throw new ResourceAlreadyExistsException();
         }
         Message answer = vetResponder.answer(chat, message);
-        chat.addMessage(answer);
+        chat.addMessage(answer); // TODO: answer is not saved in the chat
         chatRepository.save(chat);
-
-        return Optional.ofNullable(answer);
+        return chat; //TODO: how to return message from repository?
     }
 }

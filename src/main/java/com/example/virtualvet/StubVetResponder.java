@@ -6,6 +6,6 @@ import org.springframework.stereotype.Component;
 public class StubVetResponder implements VetResponder {
     @Override
     public Message answer(Chat chat, Message message) {
-        return "I don't know";
+        return new Message("I don't know", Type.RESPONSE);
     }
 }
