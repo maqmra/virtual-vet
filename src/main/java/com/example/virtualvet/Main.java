@@ -10,6 +10,7 @@ public class Main {
 		SpringApplication.run(Main.class, args);
 		//TODO: add transactions
 		// TODO: use UUID
+		// TODO: read about on delete, orphan removal, cascade.delete
 
 	}
 

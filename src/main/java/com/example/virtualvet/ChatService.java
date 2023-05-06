@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class ChatService {
@@ -35,7 +34,6 @@ public class ChatService {
     }
 
     public Chat addMessage(Long chatId, Message message) {
-        UUID.randomUUID();
         Optional<Chat> foundChat = chatRepository.findById(chatId);
         if (foundChat.isEmpty()) {
             throw new ResourceNotFoundException();

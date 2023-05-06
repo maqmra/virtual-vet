@@ -30,7 +30,7 @@ public class Chat {
     private Long id;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-//    @OnDelete(action = OnDeleteAction.SET_NULL) // TODO: check this
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "chat_id", nullable = false)
     private List<Message> messages;
 
@@ -41,8 +41,6 @@ public class Chat {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    // TODO: dlaczego bez tej linijki usuwanie użytkownika skutkuje usunięciem też wszytskiuch wiadomości z nim powiązanych?
     private User user;
 
     public Chat(User user, Pet pet) {
@@ -50,7 +48,7 @@ public class Chat {
         this.pet = pet;
         this.messages = new ArrayList<>();
     }
-//
+
     public Chat() {
         this.messages = new ArrayList<>();
     }

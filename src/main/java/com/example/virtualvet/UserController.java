@@ -40,12 +40,12 @@ public class UserController {
     @PutMapping("/users/{id}")
     public ResponseEntity<User> updateById(@PathVariable(name = "id") Long id, @RequestBody User user) {// TODO: czemu usuwa mi też czat?
         User updatedUser = userService.updateById(id, user);
-        return new ResponseEntity<>(updatedUser, HttpStatus.OK); // TODO: is this http status correct?
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
     @DeleteMapping("/users/{id}")
     public ResponseEntity<Long> deleteById(@PathVariable(name = "id") Long id) {
         userService.deleteById(id);
-        return new ResponseEntity<>(id, HttpStatus.OK);
+        return new ResponseEntity<>(id, HttpStatus.NO_CONTENT);
     }
 }

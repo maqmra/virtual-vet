@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
-
 @Controller
 public class ChatController {
 
@@ -24,7 +23,7 @@ public class ChatController {
     @Autowired
     private ChatService chatService;
 
-    @PostMapping("/chats/{userId}/{petId}")// TODO: Add to http status error message USerId/PetId not found
+    @PostMapping("/chats/{userId}/{petId}")// TODO: Add to http status error message USerId/PetId not found(later)
     public ResponseEntity<Chat> createChat(@PathVariable(name = "userId") Long userId, @PathVariable(name = "petId") Long petId) {
         Chat chat = chatService.createChat(userId, petId);
         return new ResponseEntity<>(chat, HttpStatus.CREATED);

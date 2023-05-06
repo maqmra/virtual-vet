@@ -12,8 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "messages")
@@ -28,7 +27,7 @@ public class Message {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "message")
+    @Column(name = "message", length = 1000)
     private String message;
 
     @Enumerated(EnumType.STRING)
@@ -37,10 +36,7 @@ public class Message {
 
     @Column(name = "create_time", nullable = false, updatable = false)
     @CreationTimestamp
-    private LocalDateTime createTime;// TODO: add "yyyy-MM-dd hh:mm:ss" format
-    // TODO: add timezone to createTime
-
-
+    private OffsetDateTime createTime;
 
     public Message(String message, Type type) {
         this.message = message;

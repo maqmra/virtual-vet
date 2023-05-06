@@ -64,12 +64,12 @@ public class PetController {
     @DeleteMapping(value = "/pets/{petId}")
     public ResponseEntity<Long> deleteById(@PathVariable(name = "petId") Long id) {
         petService.deleteById(id);
-        return new ResponseEntity<>(id, HttpStatus.OK);
+        return new ResponseEntity<>(id, HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(value = "/users/{id}/pets", params = "name")
     public ResponseEntity<Long> deleteByUserIdAndPetName(@PathVariable(name = "id") Long id, @RequestParam(name = "name") String name) {
         Long deletedPetId = petService.deleteByUserIdAndPetName(id, name);
-        return new ResponseEntity<>(deletedPetId, HttpStatus.OK);
+        return new ResponseEntity<>(deletedPetId, HttpStatus.NO_CONTENT);
     }
 }
