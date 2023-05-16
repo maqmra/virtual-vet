@@ -1,5 +1,7 @@
-package com.example.virtualvet;
+package com.example.virtualvet.controller;
 
+import com.example.virtualvet.model.User;
+import com.example.virtualvet.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

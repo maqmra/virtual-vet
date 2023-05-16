@@ -1,5 +1,9 @@
-package com.example.virtualvet;
+package com.example.virtualvet.service;
 
+import com.example.virtualvet.model.User;
+import com.example.virtualvet.repository.UserRepository;
+import com.example.virtualvet.exception.ResourceAlreadyExistsException;
+import com.example.virtualvet.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +18,11 @@ public class UserService {
     private UserRepository userRepository;
 
     public List<User> getAll() {
-        List<User> users = new ArrayList<>(userRepository.findAll());
-        if (users.isEmpty()) {
-            throw new ResourceNotFoundException();
-        }
-        return users;
+        return new ArrayList<>(userRepository.findAll());
     }
 
     public User getById(Long id) {
-        Optional<User> foundUser = userRepository.findById(id.toString());
+        Optional<User> foundUser = userRepository.findById(id);
         if (foundUser.isEmpty()) {
             throw new ResourceNotFoundException();
         }
@@ -37,10 +37,10 @@ public class UserService {
     }
 
     public User updateById(Long id, User user) {
-        if (!userRepository.existsById(id.toString())) {
+        if (!userRepository.existsById(id)) {
             throw new ResourceNotFoundException();
         }
-        User updatedUser = userRepository.getReferenceById(id.toString());
+        User updatedUser = userRepository.getReferenceById(id);
         updatedUser.setFirstName(user.getFirstName());
         updatedUser.setLastName(user.getLastName());
         updatedUser.setEmail(user.getEmail());
@@ -49,10 +49,10 @@ public class UserService {
     }
 
     public void deleteById(Long id) {
-        if (!userRepository.existsById(id.toString())) {
+        if (!userRepository.existsById(id)) {
             throw new ResourceNotFoundException();
         }
-        userRepository.deleteById(id.toString());
+        userRepository.deleteById(id);
     }
 
 }

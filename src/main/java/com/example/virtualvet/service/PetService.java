@@ -1,8 +1,15 @@
-package com.example.virtualvet;
+package com.example.virtualvet.service;
 
+import com.example.virtualvet.model.Pet;
+import com.example.virtualvet.repository.PetRepository;
+import com.example.virtualvet.model.User;
+import com.example.virtualvet.repository.UserRepository;
+import com.example.virtualvet.exception.ResourceAlreadyExistsException;
+import com.example.virtualvet.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -17,7 +24,7 @@ public class PetService {
     private UserRepository userRepository;
 
     public Pet createPet(Long ownerId, Pet pet) {
-        Optional<User> foundOwner = userRepository.findById(ownerId.toString());
+        Optional<User> foundOwner = userRepository.findById(ownerId);
         if (foundOwner.isEmpty()) {
             throw new ResourceNotFoundException();
         }
@@ -37,13 +44,7 @@ public class PetService {
     }
 
     public List<Pet> getAll() {
-        List<Pet> pets = petRepository.findAll();
-        if (pets.isEmpty()) {
-            throw new ResourceNotFoundException();
-        } else {
-            return pets;
-
-        }
+        return new ArrayList<>(petRepository.findAll());
     }
 
     public Pet getById(Long id) {
@@ -55,7 +56,7 @@ public class PetService {
     }
 
     public List<Pet> getAllByOwnerId(Long id) {
-        Optional<User> foundOwner = userRepository.findById(id.toString());
+        Optional<User> foundOwner = userRepository.findById(id);
         if (foundOwner.isEmpty()) {
             throw new ResourceNotFoundException();
         }
@@ -64,7 +65,7 @@ public class PetService {
     }
 
     public Pet getByOwnerIdAndPetName(Long ownerId, String petName) {
-        Optional<User> foundUser = userRepository.findById(ownerId.toString());
+        Optional<User> foundUser = userRepository.findById(ownerId);
         if (foundUser.isEmpty()) {
             throw new ResourceNotFoundException();
         }
@@ -93,7 +94,7 @@ public class PetService {
     }
 
     public Pet updateByOwnerIdAndPetName(Long id, String name, Pet pet) {
-        Optional<User> foundUser = userRepository.findById(id.toString());
+        Optional<User> foundUser = userRepository.findById(id);
         if (foundUser.isEmpty()) {
             throw new ResourceNotFoundException();
         }
@@ -125,7 +126,7 @@ public class PetService {
     }
 
     public Long deleteByUserIdAndPetName(Long id, String name) {
-        Optional<User> foundUser = userRepository.findById(id.toString());
+        Optional<User> foundUser = userRepository.findById(id);
         if (foundUser.isEmpty()) {
             throw new ResourceNotFoundException();
 

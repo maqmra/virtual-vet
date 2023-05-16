@@ -1,4 +1,4 @@
-package com.example.virtualvet;
+package com.example.virtualvet.model;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -45,7 +45,6 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_id", nullable = false)
     private List<Pet> pets;
-
 
     public User(String firstName, String lastName, @NonNull String email) {
         this.firstName = firstName;

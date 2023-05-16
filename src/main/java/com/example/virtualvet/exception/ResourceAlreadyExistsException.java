@@ -1,4 +1,4 @@
-package com.example.virtualvet;
+package com.example.virtualvet.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

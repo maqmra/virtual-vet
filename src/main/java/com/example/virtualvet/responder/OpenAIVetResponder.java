@@ -1,5 +1,10 @@
-package com.example.virtualvet;
+package com.example.virtualvet.responder;
 
+import com.example.virtualvet.model.Chat;
+import com.example.virtualvet.model.Message;
+import com.example.virtualvet.model.Pet;
+import com.example.virtualvet.model.User;
+import com.example.virtualvet.enums.Type;
 import com.theokanning.openai.completion.chat.ChatCompletionRequest;
 import com.theokanning.openai.completion.chat.ChatMessage;
 import com.theokanning.openai.service.OpenAiService;
@@ -18,7 +23,7 @@ public class OpenAIVetResponder implements VetResponder {
     @Value("${openai.key}")
     private String apiKey;
 
-    @Value("${openai.timeout}")
+    @Value("${openai.timeout}") // TODO: read about it
     private String apiTimeout;
 
     private static final String GPT_MODEL = "gpt-3.5-turbo";

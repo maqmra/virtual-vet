@@ -1,8 +1,10 @@
-package com.example.virtualvet;
+package com.example.virtualvet.responder;
 
-import org.springframework.stereotype.Component;
+import com.example.virtualvet.model.Chat;
+import com.example.virtualvet.model.Message;
+import com.example.virtualvet.enums.Type;
 
-//@Component //TODO: read about it
+//@Component
 public class StubVetResponder implements VetResponder {
     @Override
     public Message answer(Chat chat, Message question) {

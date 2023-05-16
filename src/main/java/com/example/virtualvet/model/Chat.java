@@ -1,4 +1,4 @@
-package com.example.virtualvet;
+package com.example.virtualvet.model;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
