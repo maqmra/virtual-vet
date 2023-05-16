@@ -1,4 +1,4 @@
-package com.example.virtualvet.enums;
+package com.example.virtualvet.model;
 
 public enum Sex {
     MALE, FEMALE

@@ -1,6 +1,5 @@
 package com.example.virtualvet.model;
 
-import com.example.virtualvet.enums.Sex;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

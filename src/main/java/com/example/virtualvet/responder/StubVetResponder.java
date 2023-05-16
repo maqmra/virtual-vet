@@ -2,7 +2,7 @@ package com.example.virtualvet.responder;
 
 import com.example.virtualvet.model.Chat;
 import com.example.virtualvet.model.Message;
-import com.example.virtualvet.enums.Type;
+import com.example.virtualvet.model.Type;
 
 //@Component
 public class StubVetResponder implements VetResponder {

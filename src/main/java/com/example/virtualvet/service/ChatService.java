@@ -1,7 +1,7 @@
 package com.example.virtualvet.service;
 
 import com.example.virtualvet.model.Chat;
-import com.example.virtualvet.enums.Type;
+import com.example.virtualvet.model.Type;
 import com.example.virtualvet.repository.ChatRepository;
 import com.example.virtualvet.model.Message;
 import com.example.virtualvet.model.Pet;
