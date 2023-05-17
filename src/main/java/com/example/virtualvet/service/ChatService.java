@@ -10,6 +10,7 @@ import com.example.virtualvet.repository.UserRepository;
 import com.example.virtualvet.responder.VetResponder;
 import com.example.virtualvet.exception.ResourceAlreadyExistsException;
 import com.example.virtualvet.exception.ResourceNotFoundException;
+import org.jboss.logging.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,7 +59,7 @@ public class ChatService {
         if (!messageAdded) {
            throw new ResourceAlreadyExistsException();
         }
-        Message answer = vetResponder.answer(chat, newQuestion);
+        Message answer = vetResponder.answer(chat, newQuestion.getMessage());
         chat.addMessage(answer);
         chatRepository.save(chat);
         return chat;
