@@ -1,5 +1,8 @@
 package com.example.virtualvet.service;
 
+import antlr.debug.MessageEvent;
+import com.example.virtualvet.exception.ExceptionMessage;
+import com.example.virtualvet.model.Message;
 import com.example.virtualvet.model.User;
 import com.example.virtualvet.repository.UserRepository;
 import com.example.virtualvet.exception.ResourceAlreadyExistsException;
@@ -7,6 +10,7 @@ import com.example.virtualvet.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Id;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,21 +28,21 @@ public class UserService {
     public User getById(Long id) {
         Optional<User> foundUser = userRepository.findById(id);
         if (foundUser.isEmpty()) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ExceptionMessage.forUserNotFoundById(id));
         }
         return foundUser.get();
     }
 
     public User create(User user) {
         if (userRepository.findAll().stream().map(User::getEmail).anyMatch(email -> email.equals(user.getEmail()))) {
-            throw new ResourceAlreadyExistsException();
+            throw new ResourceAlreadyExistsException(ExceptionMessage.forUserEmailAlreadyExists());
         }
         return userRepository.save(user);
     }
 
     public User updateById(Long id, User user) {
         if (!userRepository.existsById(id)) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ExceptionMessage.forUserNotFoundById(id));
         }
         User updatedUser = userRepository.getReferenceById(id);
         updatedUser.setFirstName(user.getFirstName());
@@ -50,7 +54,7 @@ public class UserService {
 
     public void deleteById(Long id) {
         if (!userRepository.existsById(id)) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ExceptionMessage.forUserNotFoundById(id));
         }
         userRepository.deleteById(id);
     }

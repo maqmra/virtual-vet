@@ -48,8 +48,8 @@ public class ChatController {
     }
 
     @GetMapping("/chats/{id}")
-    public ResponseEntity<Chat> getChatById(@PathVariable(name = "id") Long id) {
-        Chat chat = chatService.getAllChatsById(id);
+    public ResponseEntity<Chat> getById(@PathVariable(name = "id") Long id) {
+        Chat chat = chatService.getById(id);
         return new ResponseEntity<>(chat, HttpStatus.OK);
     }
 

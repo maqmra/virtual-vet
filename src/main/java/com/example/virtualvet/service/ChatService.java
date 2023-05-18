@@ -1,5 +1,6 @@
 package com.example.virtualvet.service;
 
+import com.example.virtualvet.exception.ExceptionMessage;
 import com.example.virtualvet.model.Chat;
 import com.example.virtualvet.model.Type;
 import com.example.virtualvet.repository.ChatRepository;
@@ -7,10 +8,9 @@ import com.example.virtualvet.model.Message;
 import com.example.virtualvet.model.Pet;
 import com.example.virtualvet.model.User;
 import com.example.virtualvet.repository.UserRepository;
-import com.example.virtualvet.responder.VetResponder;
+import com.example.virtualvet.responder.OpenAIVetResponder;
 import com.example.virtualvet.exception.ResourceAlreadyExistsException;
 import com.example.virtualvet.exception.ResourceNotFoundException;
-import org.jboss.logging.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,18 +28,18 @@ public class ChatService {
     private UserRepository userRepository;
 
     @Autowired
-    private VetResponder vetResponder;
+    private OpenAIVetResponder vetResponder;
 
 
     public Chat createChat(Long userId, Long petId) {
         Optional<User> foundUser = userRepository.findById(userId);
         if (foundUser.isEmpty()) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ExceptionMessage.forChatNotFoundById(userId));
         }
         User user = foundUser.get();
         List<Pet> pets = user.getPets();
         if (pets.isEmpty() || pets.stream().map(Pet::getId).noneMatch(foundPetId -> foundPetId.equals(petId))) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ExceptionMessage.forPetNotFoundById(petId));
         }
         Pet pet = user.findPetById(petId);
         Chat chat = new Chat(user, pet);
@@ -49,7 +49,7 @@ public class ChatService {
     public Chat ask(Long chatId, String question) {
         Optional<Chat> foundChat = chatRepository.findById(chatId);
         if (foundChat.isEmpty()) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ExceptionMessage.forChatNotFoundById(chatId));
         }
         Chat chat = foundChat.get();
 
@@ -57,7 +57,7 @@ public class ChatService {
 
         boolean messageAdded = chat.addMessage(newQuestion);
         if (!messageAdded) {
-           throw new ResourceAlreadyExistsException();
+           throw new ResourceAlreadyExistsException(ExceptionMessage.forMessageIdAlreadyExists());
         }
         Message answer = vetResponder.answer(chat, newQuestion.getMessage());
         chat.addMessage(answer);
@@ -69,10 +69,10 @@ public class ChatService {
         return new ArrayList<>(chatRepository.findAll());
     }
 
-    public Chat getAllChatsById(Long id) {
+    public Chat getById(Long id) {
         Optional<Chat> foundChat = chatRepository.findById(id);
         if (foundChat.isEmpty()) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ExceptionMessage.forChatNotFoundById(id));
         }
         return foundChat.get();
     }
@@ -80,9 +80,10 @@ public class ChatService {
     public List<Chat> getAllChatsForUserByUserId(Long id) {
         Optional<User> foundUser = userRepository.findById(id);
         if (foundUser.isEmpty()) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ExceptionMessage.forUserNotFoundById(id));
         }
         return chatRepository.findAll().stream().filter(chat -> Objects.equals(chat.getUser().getId(), id)).toList();
     }
+
 }
 

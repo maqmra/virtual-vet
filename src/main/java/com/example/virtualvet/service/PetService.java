@@ -1,5 +1,6 @@
 package com.example.virtualvet.service;
 
+import com.example.virtualvet.exception.ExceptionMessage;
 import com.example.virtualvet.model.Pet;
 import com.example.virtualvet.repository.PetRepository;
 import com.example.virtualvet.model.User;
@@ -26,12 +27,12 @@ public class PetService {
     public Pet createPet(Long ownerId, Pet pet) {
         Optional<User> foundOwner = userRepository.findById(ownerId);
         if (foundOwner.isEmpty()) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ExceptionMessage.forUserNotFoundById(ownerId));
         }
         User owner = foundOwner.get();
         boolean petAdded = owner.addPet(pet);
         if (!petAdded) {
-            throw new ResourceAlreadyExistsException();
+            throw new ResourceAlreadyExistsException(ExceptionMessage.forPetNameAlreadyExists());
         }
         List<Pet> petsFromUpdatedListFromUser = userRepository.save(owner).getPets();
         Pet createdPet = null;
@@ -50,7 +51,7 @@ public class PetService {
     public Pet getById(Long id) {
         Optional<Pet> foundPet = petRepository.findById(id);
         if (foundPet.isEmpty()) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ExceptionMessage.forPetNotFoundById(id));
         }
         return foundPet.get();
     }
@@ -58,7 +59,7 @@ public class PetService {
     public List<Pet> getAllByOwnerId(Long id) {
         Optional<User> foundOwner = userRepository.findById(id);
         if (foundOwner.isEmpty()) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ExceptionMessage.forUserNotFoundById(id));
         }
         User owner = foundOwner.get();
         return owner.getPets().stream().toList();
@@ -67,7 +68,7 @@ public class PetService {
     public Pet getByOwnerIdAndPetName(Long ownerId, String petName) {
         Optional<User> foundUser = userRepository.findById(ownerId);
         if (foundUser.isEmpty()) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ExceptionMessage.forChatNotFoundById(ownerId));
         }
         List<Pet> pets = foundUser.get().getPets().stream().toList();
         for (Pet pet : pets) {
@@ -75,13 +76,13 @@ public class PetService {
                 return pet;
             }
         }
-        throw new ResourceNotFoundException();
+        throw new ResourceNotFoundException(ExceptionMessage.forPetNotFoundByName(petName));
     }
 
     public Pet updateById(Long id, Pet pet) {
         Optional<Pet> foundPet = petRepository.findById(id);
         if (foundPet.isEmpty()) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ExceptionMessage.forPetNotFoundById(id));
         }
         Pet updatedPet = foundPet.get();
         updatedPet.setName(pet.getName());
@@ -96,12 +97,12 @@ public class PetService {
     public Pet updateByOwnerIdAndPetName(Long id, String name, Pet pet) {
         Optional<User> foundUser = userRepository.findById(id);
         if (foundUser.isEmpty()) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ExceptionMessage.forUserNotFoundById(id));
         }
         User owner = foundUser.get();
         List<Pet> pets = owner.getPets().stream().toList();
         if (pets.isEmpty()) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ExceptionMessage.forPetNotFoundByName(name));
         }
         for (Pet updatedPet : pets) {
             if (updatedPet.getName().equalsIgnoreCase(name)) {
@@ -114,13 +115,13 @@ public class PetService {
                 return updatedPet;
             }
         }
-        throw new ResourceNotFoundException();
+        throw new ResourceNotFoundException(ExceptionMessage.forPetNotFoundByName(name));
     }
 
     public void deleteById(Long id) {
         Optional<Pet> foundPet = petRepository.findById(id);
         if (foundPet.isEmpty()) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ExceptionMessage.forPetNotFoundById(id));
         }
         petRepository.deleteById(id);
     }
@@ -128,13 +129,13 @@ public class PetService {
     public Long deleteByUserIdAndPetName(Long id, String name) {
         Optional<User> foundUser = userRepository.findById(id);
         if (foundUser.isEmpty()) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ExceptionMessage.forUserNotFoundById(id));
 
         }
         User owner = foundUser.get();
         List<Pet> pets = owner.getPets().stream().toList();
         if (pets.isEmpty()) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(ExceptionMessage.forPetNotFoundByName(name));
 
         }
         Long deletedPetId;
@@ -146,7 +147,7 @@ public class PetService {
                 return deletedPetId;
             }
         }
-        throw new ResourceNotFoundException();
+        throw new ResourceNotFoundException(ExceptionMessage.forPetNotFoundByName(name));
     }
 }
 

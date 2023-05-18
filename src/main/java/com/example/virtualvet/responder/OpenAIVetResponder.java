@@ -38,16 +38,16 @@ public class OpenAIVetResponder implements VetResponder {
     @Override
     public Message answer(Chat chat, String question) {
         List<ChatMessage> chatMessages = addChatMessages(chat, question);
-        ChatCompletionRequest request = new ChatCompletionRequest().builder()
+        ChatCompletionRequest request = ChatCompletionRequest.builder()
                 .model(GPT_MODEL)
                 .temperature(0.8)
                 .messages(chatMessages)
                 .build();
 
         StringBuilder builder = new StringBuilder();
-        openAiService.createChatCompletion(request).getChoices().forEach(choice -> {
-            builder.append((choice.getMessage().getContent()));
-        });
+        openAiService.createChatCompletion(request).getChoices().forEach(choice ->
+                builder.append((choice.getMessage().getContent()))
+        );
         String jsonResponse = builder.toString();
         return new Message(jsonResponse, Type.RESPONSE);
     }
@@ -63,19 +63,23 @@ public class OpenAIVetResponder implements VetResponder {
     }
 
     private ChatMessage toChatMessage(Message message) {
-        if (message.getType() == Type.QUESTION) {
-            return new ChatMessage("user", message.getMessage());
-        } else if (message.getType() == Type.RESPONSE) {
-            return new ChatMessage("assistant", message.getMessage());
-        } else {
-            return null;
-        } // TODO: convert to switch
+        switch (message.getType()) {
+            case QUESTION -> {
+                return new ChatMessage("user", message.getMessage());
+            }
+            case RESPONSE -> {
+                return new ChatMessage("assistant", message.getMessage());
+            }
+            default -> {
+                return null;
+            }
+        }
     }
 
     private ChatMessage systemTaskMessage(Chat chat) {
         User user = chat.getUser();
         Pet pet = chat.getPet();
-        var message =  String.format("""
+        var message = String.format("""
                 You are a virtual vet and you are talking to a pet owner who is asking you about their pet.
                 Give professional and friendly answers. Adjust the language of the conversation to the language in which the question was asked.
                 Remind the pet owner to contact a real veterinarian and not just rely on your answers.

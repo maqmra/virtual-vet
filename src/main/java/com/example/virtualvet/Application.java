@@ -11,7 +11,6 @@ public class Application {
 		// TODO: read about on delete, orphan removal, cascade.delete. | Read about transactions in Spring. | @Transactional - read about it | Read about @Component
 
 		// TODO: use @ExceptionHandler
-		// TODO: add @Valid for creating users and pets
 
 	}
 
