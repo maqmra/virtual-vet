@@ -1,16 +1,13 @@
 package com.example.virtualvet.service;
 
-import antlr.debug.MessageEvent;
 import com.example.virtualvet.exception.ExceptionMessage;
-import com.example.virtualvet.model.Message;
-import com.example.virtualvet.model.User;
-import com.example.virtualvet.repository.UserRepository;
 import com.example.virtualvet.exception.ResourceAlreadyExistsException;
 import com.example.virtualvet.exception.ResourceNotFoundException;
+import com.example.virtualvet.model.User;
+import com.example.virtualvet.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Id;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

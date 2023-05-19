@@ -29,7 +29,7 @@ public class ChatController {
     @Autowired
     private ChatService chatService;
 
-    @PostMapping("/chats/{userId}/{petId}")// TODO: Add to http status error message USerId/PetId not found(later)
+    @PostMapping("/chats/{userId}/{petId}")
     public ResponseEntity<Chat> createChat(@PathVariable(name = "userId") Long userId, @PathVariable(name = "petId") Long petId) {
         Chat chat = chatService.createChat(userId, petId);
         return new ResponseEntity<>(chat, HttpStatus.CREATED);
