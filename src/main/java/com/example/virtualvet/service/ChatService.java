@@ -82,7 +82,7 @@ public class ChatService {
         if (foundUser.isEmpty()) {
             throw new ResourceNotFoundException(ExceptionMessage.forUserNotFoundById(id));
         }
-        return chatRepository.findAll().stream().filter(chat -> Objects.equals(chat.getUser().getId(), id)).toList();
+        return chatRepository.findAll().stream().filter(chat -> Objects.equals(chat.getUser().getId(), id)).toList(); //todo replace to custom findBy****
     }
 
 }

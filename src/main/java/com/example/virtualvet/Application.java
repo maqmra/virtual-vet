@@ -10,6 +10,7 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 		// TODO: read about on delete, orphan removal, cascade.delete. | Read about transactions in Spring. | @Transactional - read about it | Read about @Component
 		// TODO: do I need more ExceptionHandlers?
+		// todo: read more about reflection (but not detailed)
 
 	}
 

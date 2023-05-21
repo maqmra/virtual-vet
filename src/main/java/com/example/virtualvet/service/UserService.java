@@ -5,7 +5,7 @@ import com.example.virtualvet.exception.ResourceAlreadyExistsException;
 import com.example.virtualvet.exception.ResourceNotFoundException;
 import com.example.virtualvet.model.User;
 import com.example.virtualvet.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public List<User> getAll() {
         return new ArrayList<>(userRepository.findAll());
@@ -31,17 +31,18 @@ public class UserService {
     }
 
     public User create(User user) {
-        if (userRepository.findAll().stream().map(User::getEmail).anyMatch(email -> email.equals(user.getEmail()))) {
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new ResourceAlreadyExistsException(ExceptionMessage.forUserEmailAlreadyExists());
         }
         return userRepository.save(user);
     }
 
     public User updateById(Long id, User user) {
-        if (!userRepository.existsById(id)) {
+        Optional<User> foundUser = userRepository.findById(id);
+        if (foundUser.isEmpty()) {
             throw new ResourceNotFoundException(ExceptionMessage.forUserNotFoundById(id));
         }
-        User updatedUser = userRepository.getReferenceById(id);
+        User updatedUser = foundUser.get();
         updatedUser.setFirstName(user.getFirstName());
         updatedUser.setLastName(user.getLastName());
         updatedUser.setEmail(user.getEmail());

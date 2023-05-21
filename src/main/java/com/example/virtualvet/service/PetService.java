@@ -68,7 +68,7 @@ public class PetService {
     public Pet getByOwnerIdAndPetName(Long ownerId, String petName) {
         Optional<User> foundUser = userRepository.findById(ownerId);
         if (foundUser.isEmpty()) {
-            throw new ResourceNotFoundException(ExceptionMessage.forChatNotFoundById(ownerId));
+            throw new ResourceNotFoundException(ExceptionMessage.forUserNotFoundById(ownerId));
         }
         List<Pet> pets = foundUser.get().getPets().stream().toList();
         for (Pet pet : pets) {
