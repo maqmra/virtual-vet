@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
@@ -22,6 +23,7 @@ import java.util.Objects;
 @Table(name = "chats")
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Chat {
 
     @Id

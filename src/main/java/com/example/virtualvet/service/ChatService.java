@@ -1,40 +1,35 @@
 package com.example.virtualvet.service;
 
 import com.example.virtualvet.exception.ExceptionMessage;
-import com.example.virtualvet.model.Chat;
-import com.example.virtualvet.model.Type;
-import com.example.virtualvet.repository.ChatRepository;
-import com.example.virtualvet.model.Message;
-import com.example.virtualvet.model.Pet;
-import com.example.virtualvet.model.User;
-import com.example.virtualvet.repository.UserRepository;
-import com.example.virtualvet.responder.OpenAIVetResponder;
 import com.example.virtualvet.exception.ResourceAlreadyExistsException;
 import com.example.virtualvet.exception.ResourceNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.virtualvet.model.Chat;
+import com.example.virtualvet.model.Message;
+import com.example.virtualvet.model.Pet;
+import com.example.virtualvet.model.Type;
+import com.example.virtualvet.model.User;
+import com.example.virtualvet.repository.ChatRepository;
+import com.example.virtualvet.repository.UserRepository;
+import com.example.virtualvet.responder.VetResponder;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ChatService {
-    @Autowired
-    private ChatRepository chatRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private OpenAIVetResponder vetResponder;
-
+    private final ChatRepository chatRepository;
+    private final UserRepository userRepository;
+    private final VetResponder vetResponder;
 
     public Chat createChat(Long userId, Long petId) {
         Optional<User> foundUser = userRepository.findById(userId);
         if (foundUser.isEmpty()) {
-            throw new ResourceNotFoundException(ExceptionMessage.forChatNotFoundById(userId));
+            throw new ResourceNotFoundException(ExceptionMessage.forUserNotFoundById(userId));
         }
         User user = foundUser.get();
         List<Pet> pets = user.getPets();
@@ -52,7 +47,6 @@ public class ChatService {
             throw new ResourceNotFoundException(ExceptionMessage.forChatNotFoundById(chatId));
         }
         Chat chat = foundChat.get();
-
         Message newQuestion = new Message(question, Type.QUESTION);
 
         boolean messageAdded = chat.addMessage(newQuestion);
@@ -82,7 +76,7 @@ public class ChatService {
         if (foundUser.isEmpty()) {
             throw new ResourceNotFoundException(ExceptionMessage.forUserNotFoundById(id));
         }
-        return chatRepository.findAll().stream().filter(chat -> Objects.equals(chat.getUser().getId(), id)).toList(); //todo replace to custom findBy****
+        return chatRepository.findByUserId(id);
     }
 
 }

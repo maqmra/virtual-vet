@@ -209,12 +209,7 @@ class PetServiceTest {
                 .thenReturn(Optional.of(createTestPet()));
 
         //when
-        petService.updateById(1L, new Pet(
-                "Molly",
-                "cat",
-                "Ragdoll",
-                LocalDate.of(2020, 1, 30),
-                Sex.FEMALE));
+        petService.updateById(1L, updateTestPet());
 
         //then
         ArgumentCaptor<Pet> savedPetCaptor = ArgumentCaptor.forClass(Pet.class);
@@ -235,12 +230,7 @@ class PetServiceTest {
 
         //when
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
-            petService.updateById(1L, new Pet(
-                    "Polly",
-                    "cat",
-                    "Ragdoll",
-                    LocalDate.of(2020, 1, 30),
-                    Sex.FEMALE));
+            petService.updateById(1L, updateTestPet());
         });
 
         //then
@@ -256,12 +246,7 @@ class PetServiceTest {
                 .thenReturn(Optional.of(testUser));
 
         //when
-        petService.updateByOwnerIdAndPetName(1L, "Molly", new Pet(
-                "Polly",
-                "cat",
-                "Ragdoll",
-                LocalDate.of(2020, 1, 30),
-                Sex.FEMALE));
+        petService.updateByOwnerIdAndPetName(1L, "Molly", updateTestPet());
 
         //then
         ArgumentCaptor<Pet> savedPetCaptor = ArgumentCaptor.forClass(Pet.class);
@@ -282,12 +267,7 @@ class PetServiceTest {
 
         //when
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
-            petService.updateByOwnerIdAndPetName(1L, "Molly", new Pet(
-                    "Polly",
-                    "cat",
-                    "Ragdoll",
-                    LocalDate.of(2020, 1, 30),
-                    Sex.FEMALE));
+            petService.updateByOwnerIdAndPetName(1L, "Molly", updateTestPet());
         });
 
         //then
@@ -304,12 +284,7 @@ class PetServiceTest {
 
         //when
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
-            petService.updateByOwnerIdAndPetName(1L, "Rex", new Pet(
-                    "Polly",
-                    "cat",
-                    "Ragdoll",
-                    LocalDate.of(2020, 1, 30),
-                    Sex.FEMALE));
+            petService.updateByOwnerIdAndPetName(1L, "Rex", updateTestPet());
         });
 
         //then
@@ -400,6 +375,10 @@ class PetServiceTest {
 
     private static Pet createTestPet() {
         return new Pet("Molly", "cat", "Ragdoll", LocalDate.of(2020, 1, 30), Sex.FEMALE);
+    }
+
+    private static Pet updateTestPet() {
+        return new Pet("Polly", "cat", "Ragdoll", LocalDate.of(2020, 1, 30), Sex.FEMALE);
     }
 
 }

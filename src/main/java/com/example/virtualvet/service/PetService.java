@@ -1,13 +1,13 @@
 package com.example.virtualvet.service;
 
 import com.example.virtualvet.exception.ExceptionMessage;
-import com.example.virtualvet.model.Pet;
-import com.example.virtualvet.repository.PetRepository;
-import com.example.virtualvet.model.User;
-import com.example.virtualvet.repository.UserRepository;
 import com.example.virtualvet.exception.ResourceAlreadyExistsException;
 import com.example.virtualvet.exception.ResourceNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.virtualvet.model.Pet;
+import com.example.virtualvet.model.User;
+import com.example.virtualvet.repository.PetRepository;
+import com.example.virtualvet.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,13 +16,11 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class PetService {
 
-    @Autowired
-    PetRepository petRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    private final PetRepository petRepository;
+    private final UserRepository userRepository;
 
     public Pet createPet(Long ownerId, Pet pet) {
         Optional<User> foundOwner = userRepository.findById(ownerId);
