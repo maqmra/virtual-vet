@@ -1,6 +1,7 @@
 package com.example.virtualvet.service;
 
 import com.example.virtualvet.exception.ExceptionMessage;
+import com.example.virtualvet.exception.NullReferenceException;
 import com.example.virtualvet.exception.ResourceAlreadyExistsException;
 import com.example.virtualvet.exception.ResourceNotFoundException;
 import com.example.virtualvet.model.User;
@@ -31,6 +32,12 @@ public class UserService {
     }
 
     public User create(User user) {
+        if (user.getFirstName() == null) {
+            throw new NullReferenceException(ExceptionMessage.forUserFirstNameIsNull());
+        }
+        if (user.getEmail() == null) {
+            throw new NullReferenceException(ExceptionMessage.forUserEmailIsNull());
+        }
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new ResourceAlreadyExistsException(ExceptionMessage.forUserEmailAlreadyExists());
         }
@@ -38,10 +45,17 @@ public class UserService {
     }
 
     public User updateById(Long id, User user) {
+        if (user.getFirstName() == null) {
+            throw new NullReferenceException(ExceptionMessage.forUserFirstNameIsNull());
+        }
+        if (user.getEmail() == null) {
+            throw new NullReferenceException(ExceptionMessage.forUserEmailIsNull());
+        }
         Optional<User> foundUser = userRepository.findById(id);
         if (foundUser.isEmpty()) {
             throw new ResourceNotFoundException(ExceptionMessage.forUserNotFoundById(id));
         }
+
         User updatedUser = foundUser.get();
         updatedUser.setFirstName(user.getFirstName());
         updatedUser.setEmail(user.getEmail());

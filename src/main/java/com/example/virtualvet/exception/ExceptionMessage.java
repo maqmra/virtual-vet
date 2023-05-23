@@ -28,4 +28,20 @@ public class ExceptionMessage {
     public static String forUserEmailAlreadyExists() {
         return "Email already exists";
     }
+
+    public static String forUserFirstNameIsNull() {
+        return "User's first name is null";
+    }
+
+    public static String forUserEmailIsNull() {
+        return "User's email address is null";
+    }
+
+    public static String forPetNameIsNull() {
+        return "Pet's name is null";
+    }
+
+    public static String forPetSpeciesIsNull() {
+        return "User's species is null";
+    }
 }

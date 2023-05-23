@@ -1,5 +1,6 @@
 package com.example.virtualvet.controller.errors;
 
+import com.example.virtualvet.exception.NullReferenceException;
 import com.example.virtualvet.exception.ResourceAlreadyExistsException;
 import com.example.virtualvet.exception.ResourceNotFoundException;
 import org.hibernate.PropertyValueException;
@@ -24,6 +25,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException exception) {
         return new ResponseEntity<>(new ErrorResponse(Instant.now(), exception.getMessage(), HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(NullReferenceException.class)
+    public ResponseEntity<Object> handleNullReferenceException(NullReferenceException exception) {
+        return new ResponseEntity<>(new ErrorResponse(Instant.now(), exception.getMessage(), HttpStatus.FORBIDDEN), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(Exception.class)

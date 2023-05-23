@@ -1,6 +1,7 @@
 package com.example.virtualvet.service;
 
 import com.example.virtualvet.exception.ExceptionMessage;
+import com.example.virtualvet.exception.NullReferenceException;
 import com.example.virtualvet.exception.ResourceAlreadyExistsException;
 import com.example.virtualvet.exception.ResourceNotFoundException;
 import com.example.virtualvet.model.Pet;
@@ -23,6 +24,12 @@ public class PetService {
     private final UserRepository userRepository;
 
     public Pet createPet(Long ownerId, Pet pet) {
+        if (pet.getName() == null) {
+            throw new NullReferenceException(ExceptionMessage.forPetNameIsNull());
+        }
+        if (pet.getSpecies() == null) {
+            throw new NullReferenceException(ExceptionMessage.forPetSpeciesIsNull());
+        }
         Optional<User> foundOwner = userRepository.findById(ownerId);
         if (foundOwner.isEmpty()) {
             throw new ResourceNotFoundException(ExceptionMessage.forUserNotFoundById(ownerId));
@@ -78,6 +85,12 @@ public class PetService {
     }
 
     public Pet updateById(Long id, Pet pet) {
+        if (pet.getName() == null) {
+            throw new NullReferenceException(ExceptionMessage.forPetNameIsNull());
+        }
+        if (pet.getSpecies() == null) {
+            throw new NullReferenceException(ExceptionMessage.forPetSpeciesIsNull());
+        }
         Optional<Pet> foundPet = petRepository.findById(id);
         if (foundPet.isEmpty()) {
             throw new ResourceNotFoundException(ExceptionMessage.forPetNotFoundById(id));
@@ -93,6 +106,12 @@ public class PetService {
     }
 
     public Pet updateByOwnerIdAndPetName(Long id, String name, Pet pet) {
+        if (pet.getName() == null) {
+            throw new NullReferenceException(ExceptionMessage.forPetNameIsNull());
+        }
+        if (pet.getSpecies() == null) {
+            throw new NullReferenceException(ExceptionMessage.forPetSpeciesIsNull());
+        }
         Optional<User> foundUser = userRepository.findById(id);
         if (foundUser.isEmpty()) {
             throw new ResourceNotFoundException(ExceptionMessage.forUserNotFoundById(id));

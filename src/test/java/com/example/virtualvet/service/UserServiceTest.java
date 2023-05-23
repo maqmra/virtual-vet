@@ -29,6 +29,18 @@ class UserServiceTest {
     private UserService userService;
 
 
+//    static class TestUser extends {
+//
+//        private String firstName;
+//        private String email;
+//
+//        public TestUser(String firstName, String email) {
+//            this.firstName = firstName;
+//            this.email = email;
+//        }
+//    }
+
+
     @Test
     void shouldReturnUser_whenUserIdExists_forGetById() {
         //given
@@ -71,7 +83,6 @@ class UserServiceTest {
         //then
         verify(userRepositoryMock).save(userToSave);
     }
-
 
     @Test
     void shouldThrowResourceAlreadyExistsException_whenUserExists_forCreate() {
@@ -135,14 +146,14 @@ class UserServiceTest {
     }
 
     @Test
-    void shouldThrowResourceNotFoundException_whenUserIdNotExists_forDeleteById(){ //todo check name
+    void shouldThrowResourceNotFoundException_whenUserIdNotExists_forDeleteById() { //todo check name
         //given
         when(userRepositoryMock.existsById(any()))
                 .thenReturn(false);
 
         //when
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
-           userService.deleteById(1L);
+            userService.deleteById(1L);
         });
 
         //then

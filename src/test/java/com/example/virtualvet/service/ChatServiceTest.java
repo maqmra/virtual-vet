@@ -23,7 +23,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -51,7 +50,7 @@ class ChatServiceTest {
         Pet testPet = createTestPet();
         testPet.setId(1L);
         testUser.addPet(testPet);
-        when(userRepositoryMock.findById(any()))
+        when(userRepositoryMock.findById(1L))
                 .thenReturn(Optional.of(testUser));
         //when
         chatService.createChat(1L, 1L);
@@ -67,7 +66,7 @@ class ChatServiceTest {
     @Test
     void shouldThrowResourceNotFoundException_whenUserIdNotExist_forCreateChat() {
         //given
-        when(userRepositoryMock.findById(any()))
+        when(userRepositoryMock.findById(1L))
                 .thenReturn(Optional.empty());
 
         //when
@@ -83,7 +82,7 @@ class ChatServiceTest {
     void shouldThrowResourceNotFoundException_whenPetIdNotExist_forCreateChat() {
         //given
         User testUser = createTestUser();
-        when(userRepositoryMock.findById(any()))
+        when(userRepositoryMock.findById(1L))
                 .thenReturn(Optional.of(testUser));
 
         //when
@@ -100,10 +99,10 @@ class ChatServiceTest {
         //given
         Chat testChat = createTestChat();
         testChat.setId(1L);
-        Message testResponse = new Message("Test response message", Type.RESPONSE);
-        when(chatRepositoryMock.findById(any()))
+        Message testResponse = new Message("Test response", Type.RESPONSE);
+        when(chatRepositoryMock.findById(1L))
                 .thenReturn(Optional.of(testChat));
-        when(vetResponderMock.answer(any(), any()))
+        when(vetResponderMock.answer(testChat, "Test question"))
                 .thenReturn(testResponse);
 
         //when
@@ -116,7 +115,7 @@ class ChatServiceTest {
         assertEquals(
                 List.of(
                         new Message("Test question", Type.QUESTION),
-                        new Message("Test response message", Type.RESPONSE)),
+                        new Message("Test response", Type.RESPONSE)),
                 capturedChat.getMessages()
         );
     }
@@ -124,7 +123,7 @@ class ChatServiceTest {
     @Test
     void shouldThrowResourceNotFoundException_whenChatIdNotExist_forAsk() {
         //given
-        when(chatRepositoryMock.findById(any()))
+        when(chatRepositoryMock.findById(1L))
                 .thenReturn(Optional.empty());
 
         //when
@@ -136,31 +135,11 @@ class ChatServiceTest {
         assertEquals("Chat with id 1 not found", exception.getMessage());
     }
 
-//    @Test
-//    void shouldThrowResourceAlreadyExistsException_whenMessageIdExist_forAsk() { // TODO:help!!!!!!!!!!!!!!
-//        //given
-//        Chat testChat = createTestChat();
-//        Message testMessage = new Message("Test question", Type.QUESTION);
-//
-//        testChat.addMessage(testMessage);
-//        testMessage.setId(1L);
-//        when(chatRepositoryMock.findById(any()))
-//                .thenReturn(Optional.of(testChat));
-//
-//        //when
-//        ResourceAlreadyExistsException exception = assertThrows(ResourceAlreadyExistsException.class, () -> {
-//            chatService.ask(1L, "Test question");
-//        });
-//
-//        //then
-//        assertEquals("Message id already exists", exception.getMessage());
-//    }
-
     @Test
     void shouldReturnChat_whenChatIdExists_forGetById() {
         //given
         Chat testChat = createTestChat();
-        when(chatRepositoryMock.findById(any()))
+        when(chatRepositoryMock.findById(1L))
                 .thenReturn(Optional.of(testChat));
 
         //when
@@ -173,7 +152,7 @@ class ChatServiceTest {
     @Test
     void shouldThrowResourceNotFoundException_whenChatIdNotExist_forGetById() {
         //given
-        when(chatRepositoryMock.findById(any()))
+        when(chatRepositoryMock.findById(1L))
                 .thenReturn(Optional.empty());
 
         //when
@@ -186,35 +165,19 @@ class ChatServiceTest {
     }
 
 
-//    @Test
-//    void shouldReturnChatsList_whenUserIdExist_forGetAllChatsForUserByUserId() { // TODO: HEEEEEEEEEEEEELP
-//        //given
-//        Chat testChat = createTestChat();
-//
-//        User testUser = testChat.getUser();
-//        testUser.setId(1L);
-//        Pet testPet = testChat.getPet();
-//        testPet.setId(1L);
-//        testUser.addPet(testPet);
-//        when(chatRepositoryMock.save(any()))
-//                .thenReturn(testChat);
-//        when(userRepositoryMock.findById(any()))
-//                .thenReturn(Optional.of(testUser));
-//
-//        //when
-//        List<Chat> foundChat = chatService.getAllChatsForUserByUserId(1L);
-//
-//        //then
-//        assertEquals(testChat, foundChat.get(0));
-//    }
-
     @Test
-    void teest() {
+    void shouldReturnChatsList_whenUserIdExist_forGetAllChatsForUserByUserId() {
         //given
+        when(userRepositoryMock.findById(1L))
+                .thenReturn(Optional.empty());
 
         //when
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () ->{
+            chatService.getAllChatsForUserByUserId(1L);
+        });
 
         //then
+        assertEquals("User with id 1 not found", exception.getMessage());
     }
 
     private static Chat createTestChat() {
