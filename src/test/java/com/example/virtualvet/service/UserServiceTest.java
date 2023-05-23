@@ -103,7 +103,6 @@ class UserServiceTest {
         verify(userRepositoryMock).save(savedUserCaptor.capture());
         User capturedUser = savedUserCaptor.getValue();
         assertEquals("Adam", capturedUser.getFirstName());
-        assertEquals("Brown", capturedUser.getLastName());
         assertEquals("abrown@mail.com", capturedUser.getEmail());
     }
 
@@ -152,11 +151,11 @@ class UserServiceTest {
     }
 
     private static User createTestUser() {
-        return new User("John", "Lock", "jlock@mail.com");
+        return new User("John", "jlock@mail.com");
     }
 
     private static User updateTestUser() {
-        return new User("Adam", "Brown", "abrown@mail.com");
+        return new User("Adam", "abrown@mail.com");
     }
 
 }

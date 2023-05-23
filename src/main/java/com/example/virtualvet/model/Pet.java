@@ -32,7 +32,7 @@ public class Pet {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "species")
+    @Column(name = "species", nullable = false)
     private String species;
 
     @Column(name = "breed")

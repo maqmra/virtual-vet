@@ -370,7 +370,7 @@ class PetServiceTest {
     }
 
     private static User createTestUser() {
-        return new User("John", "Lock", "jlock@mail.com");
+        return new User("John", "jlock@mail.com");
     }
 
     private static Pet createTestPet() {

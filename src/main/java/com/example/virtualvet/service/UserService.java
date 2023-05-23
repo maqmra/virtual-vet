@@ -44,7 +44,6 @@ public class UserService {
         }
         User updatedUser = foundUser.get();
         updatedUser.setFirstName(user.getFirstName());
-        updatedUser.setLastName(user.getLastName());
         updatedUser.setEmail(user.getEmail());
         updatedUser = userRepository.save(updatedUser);
         return updatedUser;
