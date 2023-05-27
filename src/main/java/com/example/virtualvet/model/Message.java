@@ -29,14 +29,14 @@ public class Message {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "message", length = 1000)
+    @Column(name = "message", length = 2500, nullable = false)
     private String message;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
     private Type type;
 
-    @Column(name = "create_time", nullable = false, updatable = false)
+    @Column(name = "create_time", updatable = false)
     @CreationTimestamp
     private OffsetDateTime createTime;
 

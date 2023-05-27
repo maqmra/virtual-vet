@@ -28,19 +28,6 @@ class UserServiceTest {
     @InjectMocks
     private UserService userService;
 
-
-//    static class TestUser extends {
-//
-//        private String firstName;
-//        private String email;
-//
-//        public TestUser(String firstName, String email) {
-//            this.firstName = firstName;
-//            this.email = email;
-//        }
-//    }
-
-
     @Test
     void shouldReturnUser_whenUserIdExists_forGetById() {
         //given

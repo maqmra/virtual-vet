@@ -42,6 +42,6 @@ public class ExceptionMessage {
     }
 
     public static String forPetSpeciesIsNull() {
-        return "User's species is null";
+        return "Pet's species is null";
     }
 }
