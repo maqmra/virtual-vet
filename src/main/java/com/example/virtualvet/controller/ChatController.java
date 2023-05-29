@@ -1,9 +1,7 @@
 package com.example.virtualvet.controller;
 
 import com.example.virtualvet.model.Chat;
-import com.example.virtualvet.repository.ChatRepository;
 import com.example.virtualvet.service.ChatService;
-import com.example.virtualvet.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,16 +18,9 @@ import java.util.List;
 public class ChatController {
 
     @Autowired
-    private ChatRepository chatRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-
-    @Autowired
     private ChatService chatService;
 
-    @PostMapping("/chats/{userId}/{petId}")
+    @PostMapping("/{userId}/{petId}/chats")
     public ResponseEntity<Chat> createChat(@PathVariable(name = "userId") Long userId, @PathVariable(name = "petId") Long petId) {
         Chat chat = chatService.createChat(userId, petId);
         return new ResponseEntity<>(chat, HttpStatus.CREATED);

@@ -24,7 +24,7 @@ public class OpenAIVetResponder implements VetResponder {
     @Value("${openai.key}")
     private String apiKey;
 
-    @Value("${openai.timeout}") // TODO: read about it
+    @Value("${openai.timeout}")
     private String apiTimeout;
 
     private static final String GPT_MODEL = "gpt-3.5-turbo";

@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<User> updateById(@PathVariable(name = "id") Long id, @RequestBody User user) {// TODO: czemu usuwa mi też czat?
+    public ResponseEntity<User> updateById(@PathVariable(name = "id") Long id, @RequestBody User user) {
         User updatedUser = userService.updateById(id, user);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }

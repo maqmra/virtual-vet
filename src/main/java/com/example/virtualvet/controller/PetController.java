@@ -58,7 +58,9 @@ public class PetController {
     }
 
     @PutMapping(value = "/users/{userId}/pets", params = "name")
-    public ResponseEntity<Pet> updateByOwnerIdAndPetName(@PathVariable(name = "userId") Long id, @RequestParam(name = "name") String name, @RequestBody Pet pet) {
+    public ResponseEntity<Pet> updateByOwnerIdAndPetName(@PathVariable(name = "userId") Long id,
+                                                         @RequestParam(name = "name") String name,
+                                                         @RequestBody Pet pet) {
         Pet updatedPet = petService.updateByOwnerIdAndPetName(id, name, pet);
         return new ResponseEntity<>(updatedPet, HttpStatus.OK);
     }

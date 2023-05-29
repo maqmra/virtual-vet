@@ -78,6 +78,5 @@ public class ChatService {
         }
         return chatRepository.findByUserId(id);
     }
-
 }
 

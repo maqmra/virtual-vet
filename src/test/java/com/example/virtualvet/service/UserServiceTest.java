@@ -16,6 +16,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -27,6 +28,39 @@ class UserServiceTest {
 
     @InjectMocks
     private UserService userService;
+
+    @Test
+    void shouldUpdateUser_whenUserIdExists_forUpdateById() {
+        //given
+        when(userRepositoryMock.findById(any()))
+                .thenReturn(Optional.of(createTestUser()));
+        User updatedUser = updateTestUser();
+
+        //when
+        userService.updateById(1L, updatedUser);
+
+        //then
+        ArgumentCaptor<User> savedUserCaptor = ArgumentCaptor.forClass(User.class);
+        verify(userRepositoryMock, times(1)).save(savedUserCaptor.capture());
+        User capturedUser = savedUserCaptor.getValue();
+        assertEquals("Adam", capturedUser.getFirstName());
+        assertEquals("abrown@mail.com", capturedUser.getEmail());
+    }
+
+    @Test
+    void shouldThrowResourceNotFoundException_whenUserIdNotExists_forUpdateById() {
+        //given
+        when(userRepositoryMock.findById(any()))
+                .thenReturn(Optional.empty());
+
+        //when
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
+            userService.updateById(1L, updateTestUser());
+        });
+
+        //then
+        assertEquals("User with id 1 not found", exception.getMessage());
+    }
 
     @Test
     void shouldReturnUser_whenUserIdExists_forGetById() {
@@ -42,7 +76,7 @@ class UserServiceTest {
     }
 
     @Test
-    void shouldThrowResourceNotFoundException_whenUserIdNotExists_forGetById() { //TODO: double check tests names
+    void shouldThrowResourceNotFoundException_whenUserIdNotExists_forGetById() {
         //given
         when(userRepositoryMock.findById(any()))
                 .thenReturn(Optional.empty());
@@ -86,38 +120,9 @@ class UserServiceTest {
         assertEquals("Email already exists", exception.getMessage());
     }
 
-    @Test
-    void shouldUpdateUser_whenUserIdExists_forUpdateById() {
-        //given
-        when(userRepositoryMock.findById(any()))
-                .thenReturn(Optional.of(createTestUser()));
-        User updatedUser = updateTestUser();
 
-        //when
-        userService.updateById(1L, updatedUser);
 
-        //then
-        ArgumentCaptor<User> savedUserCaptor = ArgumentCaptor.forClass(User.class);
-        verify(userRepositoryMock).save(savedUserCaptor.capture());
-        User capturedUser = savedUserCaptor.getValue();
-        assertEquals("Adam", capturedUser.getFirstName());
-        assertEquals("abrown@mail.com", capturedUser.getEmail());
-    }
 
-    @Test
-    void shouldThrowResourceNotFoundException_whenUserIdNotExists_forUpdateById() {
-        //given
-        when(userRepositoryMock.findById(any()))
-                .thenReturn(Optional.empty());
-
-        //when
-        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
-            userService.updateById(1L, updateTestUser());
-        });
-
-        //then
-        assertEquals("User with id 1 not found", exception.getMessage());
-    }
 
     @Test
     void shouldDeleteUser_whenUserIdExists_forDeleteById() {
@@ -133,7 +138,7 @@ class UserServiceTest {
     }
 
     @Test
-    void shouldThrowResourceNotFoundException_whenUserIdNotExists_forDeleteById() { //todo check name
+    void shouldThrowResourceNotFoundException_whenUserIdNotExists_forDeleteById() {
         //given
         when(userRepositoryMock.existsById(any()))
                 .thenReturn(false);
